@@ -23,8 +23,8 @@ namespace SeaBattle
             if (!string.IsNullOrEmpty(inputDate))
             {
                 tokens = inputDate.Split(' ');
-                row =+ int.Parse(tokens[0]) - 1;
-                column =+ int.Parse(tokens[1]) - 1;
+                row = int.Parse(tokens[0]) - 1;
+                column = int.Parse(tokens[1]) - 1;
 
                 if (field.field[row, column] == '▢')
                 {
