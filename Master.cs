@@ -19,8 +19,6 @@ namespace SeaBattle
             Console.CursorVisible = false;
             CenterText("|----------Игровое меню-----------|\n" +
                        "|● Начать игру - F1               |\n" +
-                       "|● Посмотреть историю - F2        |\n" +
-                       "|● Справка - F3                   |\n" +
                        "|● Выход - ESC                    |\n" +
                        "|---------------------------------|");
             //ShowField();
@@ -32,13 +30,6 @@ namespace SeaBattle
                     case ConsoleKey.F1:
                         Console.CursorVisible = true;
                         StartGame(); break;
-
-                    case ConsoleKey.F2:
-                        ShowHistory(); break;
-
-                    case ConsoleKey.F3:
-                        ShowHistory(); break;
-
                     case ConsoleKey.Escape: return;
                 }
             }
@@ -173,9 +164,6 @@ namespace SeaBattle
                 return true;
             }
             return false;
-        }
-        public void ShowHistory()
-        {
         }
         public void ShowReference(string filename)
         {
