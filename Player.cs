@@ -11,7 +11,7 @@ namespace SeaBattle
         public string name_f;
         public int score_f;
         public Player(string name, int score) { name_f = name; score_f = score; }
-        public bool Shot(Player player, Field field)
+        public bool Shot(Player player, Field field1, Field field2)
         {
             string? inputDate;
             string[] tokens;
@@ -26,15 +26,15 @@ namespace SeaBattle
                 row = int.Parse(tokens[0]) - 1;
                 column = int.Parse(tokens[1]) - 1;
 
-                if (field.field[row, column] == '▢')
+                if (field1.field[row, column] == '▢')
                 {
                     player.score_f += 1;
-                    field.field[row, column] = '✖';
+                    field2.field[row, column] = '✖';
                     return true;
                 }
                 else
                 {
-                    field.field[row, column] = '■';
+                    field2.field[row, column] = '■';
                 }
             }
             return false;

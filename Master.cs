@@ -45,6 +45,7 @@ namespace SeaBattle
         }
         public void StartGame()
         {
+            int posX, posY;
             Random rnd = new Random();
             int startNumb = rnd.Next(1,2);
             Console.Clear();
@@ -65,6 +66,12 @@ namespace SeaBattle
             Field field2 = new Field();
             field2.field = field2.InitField();
 
+            Field field3 = new Field();
+            field3.field = field3.InitField();
+
+            Field field4 = new Field();
+            field4.field = field4.InitField();
+
             field1.ArrangeShips(field1, player1);
             GetConfirmation($"Нажмите - Enter, для передачи управления {player2.name_f}");
             field2.ArrangeShips(field2, player2);
@@ -77,47 +84,64 @@ namespace SeaBattle
             {
                 while (true)
                 {
-                    if (!player1.Shot(player1, field2)) 
+                    while (true)
                     {
-                        GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                        break;
+                        posX = Console.CursorLeft; posY = Console.CursorTop;
+                        field2.PrintField(field2.field, 55); field4.PrintField(field4.field, 85);
+                        SavePositionCursor(posX, posY);
+                        if (!player1.Shot(player1, field2, field4))
+                        {
+                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
+                            break;
+                        }
+                        if (StopGame(player1, player2))
+                            return;
                     }
-                    if (StopGame(player1, player2))
-                        return;
-                }
-                while (true)
-                {
-                    if (!player2.Shot(player2, field1)) 
+                    while (true)
                     {
-                        GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                        break;
+                        posX = Console.CursorLeft; posY = Console.CursorTop;
+                        field1.PrintField(field1.field, 55); field3.PrintField(field3.field, 85);
+                        SavePositionCursor(posX, posY);
+                        if (!player2.Shot(player2, field1, field3))
+                        {
+                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
+                            break;
+                        }
+                        if (StopGame(player1, player2))
+                            return;
                     }
-                    if (StopGame(player1, player2))
-                        return;
-                }
-                                       
+                }                    
             }
             else
             {
                 while (true)
                 {
-                    if (!player2.Shot(player2, field1)) 
+                    while (true)
                     {
-                        GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                        break; 
+                        posX = Console.CursorLeft; posY = Console.CursorTop;
+                        field2.PrintField(field2.field, 55); field4.PrintField(field4.field, 85);
+                        SavePositionCursor(posX, posY);
+                        if (!player2.Shot(player2, field1, field4))
+                        {
+                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
+                            break;
+                        }
+                        if (StopGame(player1, player2))
+                            return;
                     }
-                    if (StopGame(player1, player2))
-                        return;
-                }
-                while (true)
-                {
-                    if (!player1.Shot(player1, field2)) 
+                    while (true)
                     {
-                        GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                        break;
+                        posX = Console.CursorLeft; posY = Console.CursorTop;
+                        field1.PrintField(field1.field, 55); field4.PrintField(field4.field, 85);
+                        SavePositionCursor(posX, posY);
+                        if (!player1.Shot(player1, field2, field3))
+                        {
+                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
+                            break;
+                        }
+                        if (StopGame(player1, player2))
+                            return;
                     }
-                    if (StopGame(player1, player2))
-                        return;
                 }
             }
                  
