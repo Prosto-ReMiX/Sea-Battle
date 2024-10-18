@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace SeaBattle
@@ -15,12 +16,13 @@ namespace SeaBattle
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.Clear();
             Console.Title = "Sea Battle";
-            Console.WriteLine("|----------Игровое меню-----------|\n" +
-                              "|● Начать игру - F1               |\n" +
-                              "|● Посмотреть историю - F2        |\n" +
-                              "|● Справка - F3                   |\n" +
-                              "|● Выход - ESC                    |\n" +
-                              "|---------------------------------|");
+            Console.CursorVisible = false;
+            CenterText("|----------Игровое меню-----------|\n" +
+                       "|● Начать игру - F1               |\n" +
+                       "|● Посмотреть историю - F2        |\n" +
+                       "|● Справка - F3                   |\n" +
+                       "|● Выход - ESC                    |\n" +
+                       "|---------------------------------|");
             //ShowField();
             while (true)
             {
@@ -28,6 +30,7 @@ namespace SeaBattle
                 switch (key.Key)
                 {
                     case ConsoleKey.F1:
+                        Console.CursorVisible = true;
                         StartGame(); break;
 
                     case ConsoleKey.F2:
@@ -174,6 +177,21 @@ namespace SeaBattle
         public void SavePositionCursor(int posRow, int posColumn)
         {
             Console.SetCursorPosition(posRow, posColumn);
+        }
+        private void CenterText(string text)
+        {
+            string[] lines = Regex.Split(text, "\r\n|\r|\n");
+            int left = 0;
+            int top = (Console.WindowHeight / 2) - (lines.Length / 2) - 1;
+            int center = Console.WindowWidth / 2;
+
+            for (int counter = 0; counter < lines.Length; counter++)
+            {
+                left = center - (lines[counter].Length / 2);
+                Console.SetCursorPosition(left, top);
+                Console.WriteLine(lines[counter]);
+                top = Console.CursorTop;
+            }
         }
         /*public void ShowField()
         {
