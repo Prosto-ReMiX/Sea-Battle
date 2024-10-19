@@ -10,7 +10,18 @@ namespace SeaBattle
     {
         public string name_f;
         public int score_f;
+
         public Player(string name, int score) { name_f = name; score_f = score; }
+        public string InitNickname()
+        {
+            string? name;
+            name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = "Player";
+            }
+            return name;
+        }
         public bool Shot(Player player, Field field1, Field field2)
         {
             string? inputDate;

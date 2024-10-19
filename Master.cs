@@ -79,7 +79,7 @@ namespace SeaBattle
                     {
                         posX = Console.CursorLeft; posY = Console.CursorTop;
                         field2.PrintField(field2.field, 55); field4.PrintField(field4.field, 85);
-                        SavePositionCursor(posX, posY);
+                        field2.SavePositionCursor(posX, posY);
                         if (!player1.Shot(player1, field2, field4))
                         {
                             GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
@@ -92,7 +92,7 @@ namespace SeaBattle
                     {
                         posX = Console.CursorLeft; posY = Console.CursorTop;
                         field1.PrintField(field1.field, 55); field3.PrintField(field3.field, 85);
-                        SavePositionCursor(posX, posY);
+                        field1.SavePositionCursor(posX, posY);
                         if (!player2.Shot(player2, field1, field3))
                         {
                             GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
@@ -111,7 +111,7 @@ namespace SeaBattle
                     {
                         posX = Console.CursorLeft; posY = Console.CursorTop;
                         field2.PrintField(field2.field, 55); field4.PrintField(field4.field, 85);
-                        SavePositionCursor(posX, posY);
+                        field2.SavePositionCursor(posX, posY);
                         if (!player2.Shot(player2, field1, field4))
                         {
                             GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
@@ -124,7 +124,7 @@ namespace SeaBattle
                     {
                         posX = Console.CursorLeft; posY = Console.CursorTop;
                         field1.PrintField(field1.field, 55); field4.PrintField(field4.field, 85);
-                        SavePositionCursor(posX, posY);
+                        field1.SavePositionCursor(posX, posY);
                         if (!player1.Shot(player1, field2, field3))
                         {
                             GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
@@ -134,9 +134,7 @@ namespace SeaBattle
                             return;
                     }
                 }
-            }
-                 
-            
+            }            
         }
         private string InitNickname()
         {
@@ -148,6 +146,7 @@ namespace SeaBattle
             }
             return name;
         }
+
         private void CheckName(Player player1, Player player2)
         {
             if (player1.name_f == player2.name_f)
@@ -156,7 +155,8 @@ namespace SeaBattle
                 player2.name_f += " (2)";
             }
         }
-        public bool StopGame(Player player1, Player player2)
+
+        private bool StopGame(Player player1, Player player2)
         {
             if (player1.score_f == 20 || player2.score_f == 20)
             {
@@ -165,9 +165,7 @@ namespace SeaBattle
             }
             return false;
         }
-        public void ShowReference(string filename)
-        {
-        }
+
         private void GetConfirmation(string message)
         {
             while (true)
@@ -186,10 +184,7 @@ namespace SeaBattle
                 }
             }
         }
-        public void SavePositionCursor(int posRow, int posColumn)
-        {
-            Console.SetCursorPosition(posRow, posColumn);
-        }
+
         private void CenterText(string text)
         {
             string[] lines = Regex.Split(text, "\r\n|\r|\n");
@@ -205,6 +200,7 @@ namespace SeaBattle
                 top = Console.CursorTop;
             }
         }
+
         /*public void ShowField()
         {
             char[,] field = new char[10, 10];
