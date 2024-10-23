@@ -117,95 +117,18 @@ namespace SeaBattle
 
         public void ArrangeShips(Field field, Player player)
         {
-            string? inputDate;
-            int lenght;
-            int posX, posY;
+            int[] shipsLength = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
+            string[] ships = { "четырехпалубный", "трехпалубный", "двухпалубный", "однопалубный" };
+            
 
-            for (int counterShips = 0; counterShips < 11; counterShips++)
+            Console.WriteLine($"{player.name_f}, заполните свое поле");
+            for (int counterLength = 0; counterLength < shipsLength.Length; counterLength++)
             {
-                switch (counterShips)
-                {
-                    case 0:
-                        Console.WriteLine($"{player.name_f}, заполните свое поле");
-                        break;
-                    case 1:
-                        lenght = 4;
-                        Console.Write("Введите координаты (четырехпалубный): ");
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-
-                        inputDate = Console.ReadLine();
-                        if (inputDate != null)
-                        {
-                            PutShipOnField(field, inputDate, lenght);
-                        }
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-                        break;
-                    case 2 or 3:
-                        lenght = 3;
-                        Console.Write("Введите координаты (трехпалубный): ");
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-
-                        inputDate = Console.ReadLine();
-                        if (inputDate != null)
-                        {
-                            while (!PutShipOnField(field, inputDate, lenght))
-                            {
-                                Console.WriteLine("Ошибка");
-                            }
-                        }
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-                        break;
-                    case 4 or 5 or 6:   
-                        lenght = 2;
-                        Console.Write("Введите координаты (двухпалубный): ");
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-                        inputDate = Console.ReadLine();
-                        inputDate = Console.ReadLine();
-                        if (inputDate != null)
-                        {
-                            while (true)
-                            {
-                                if (PutShipOnField(field, inputDate, lenght)) break;
-                            }
-                        }
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-                        break;
-                    case 7 or 8 or 9 or 10:         
-                        lenght = 1;
-                        Console.Write("Введите координаты (однопалубный): ");
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-
-                        inputDate = Console.ReadLine();
-                        if (inputDate != null)
-                        {
-                            while (true)
-                            {
-                                if (PutShipOnField(field, inputDate, lenght)) break;
-                            }
-                        }
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field.PrintField(field.field, 65);
-                        SavePositionCursor(posX, posY);
-                        break;
-                }
+                PlaceShips(field, shipsLength[counterLength], ships[counterLength]);
             }
         }
 
-        private bool PutShipOnField(Field field,string inputDate, int lenght)
+        private int PutShipOnField(Field field,string inputDate, int lenght)
         {
             string[] tokens;
             int row;
@@ -218,8 +141,8 @@ namespace SeaBattle
             row = int.Parse(tokens[0]);
             column = int.Parse(tokens[1]);
 
-            if (field.field[row, column] == '▢')
-                return false;
+            if (field.field[row - 1, column - 1] == '▢')
+                return -1;
 
             while (true)
             {
@@ -229,26 +152,30 @@ namespace SeaBattle
                     case ConsoleKey.RightArrow:
                         isHorizontal = isRight = true;
                         isUp = false;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
                         field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.LeftArrow:
                         isHorizontal = true;
                         isRight = isUp = false;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
                         field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.UpArrow:
                         isHorizontal = isRight = false;
                         isUp = true;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
                         field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.DownArrow:
                         isHorizontal = isRight = isUp = false;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
                         field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                 }
                 break;
             }
-            return true;
+            return 0;
         }
 
         public void SavePositionCursor(int posRow, int posColumn)
@@ -258,57 +185,46 @@ namespace SeaBattle
 
         private bool CheckCoordinate(bool isHorizontal, bool isRight, bool isUp, int length, int row, int column)
         {
-            for (var counterLength = 1; counterLength < 4; counterLength++)
-            {
-                if (isHorizontal && !isRight)
-                    return column - counterLength < 0;
-                if (isHorizontal && isRight)
-                    return column + counterLength > 10;
-                if (!isHorizontal && isUp)
-                    return row - counterLength < 0;
-                if (!isHorizontal && !isUp)
-                    return row + counterLength > 10;
-            }
+            if (isHorizontal && !isRight && !isUp)
+               if (column - length < 0) return false;
+            if (isHorizontal && isRight && !isUp)
+               if (column + length > 9) return false;
+            if (!isHorizontal && !isRight && isUp)
+               if (row - length < 0) return false;
+            if (!isHorizontal && !isRight && !isUp)
+               if (row + length > 9) return false;
             return true;
         }
 
-        /*private int ParseIndex(char indexRow)
+        private void PlaceShips(Field field, int length, string shipName)
         {
-            int row = 0;
-            switch (indexRow)
+            string? inputDate;
+            int posX, posY;
+
+            while (true)
             {
-                case 'А':
-                    row = 1;
-                    break;
-                case 'Б':
-                    row = 2;
-                    break;
-                case 'В':
-                    row = 3;
-                    break;
-                case 'Г':
-                    row = 4;
-                    break;
-                case 'Д':
-                    row = 5;
-                    break;
-                case 'Е':
-                    row = 6;
-                    break;
-                case 'Ж':
-                    row = 7;
-                    break;
-                case 'З':
-                    row = 8;
-                    break;
-                case 'И':
-                    row = 9;
-                    break;
-                case 'К':
-                    row = 10;
-                    break;
+                Console.Write($"Введите координаты ({shipName}): ");
+                posX = Console.CursorLeft; posY = Console.CursorTop;
+                field.PrintField(field.field, 65);
+                SavePositionCursor(posX, posY);
+
+                inputDate = Console.ReadLine();
+                if (inputDate != null)
+                {
+                    if (PutShipOnField(field, inputDate, length) == -1)
+                    {
+                        Console.WriteLine("Ошибка, клетка уже занята");
+                    }
+                    else if (PutShipOnField(field, inputDate, length) == -2)
+                    {
+                        Console.WriteLine("Ошибка, направление выбрано неправильно");
+                    }
+                    else break;
+                }
             }
-            return row;
-        }*/
+            posX = Console.CursorLeft; posY = Console.CursorTop;
+            field.PrintField(field.field, 65);
+            SavePositionCursor(posX, posY);
+        }
     }
 }
