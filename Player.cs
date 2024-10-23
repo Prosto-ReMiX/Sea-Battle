@@ -42,12 +42,12 @@ namespace SeaBattle
                 if (field1.field[row, column] == '▢')
                 {
                     player.score_f += 1;
-                    field2.field[row, column] = '✖';
+                    field2.field[row, column] = '✘';
                     return true;
                 }
                 else
                 {
-                    field2.field[row, column] = '■';
+                    field2.field[row, column] = '⁕';
                 }
             }
             return false;

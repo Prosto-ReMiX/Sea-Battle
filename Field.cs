@@ -15,10 +15,11 @@ namespace SeaBattle
 
         public char[,] InitField()
         {
+            
             for (int counterRow = 0; counterRow < field.GetLength(0); counterRow++)
                 for (int counterColumn = 0; counterColumn < field.GetLength(1); counterColumn++)
                 {
-                    field[counterRow, counterColumn] = ' ';
+                    field[counterRow, counterColumn] = '■';
                 }
             return field;
         }
@@ -33,7 +34,29 @@ namespace SeaBattle
                 Console.Write((counterRow + 1).ToString().PadLeft(2) + " [ ");
                 for (int counterColumn = 0; counterColumn < field.GetLength(1); counterColumn++)
                 {
-                    Console.Write($"{field[counterRow, counterColumn]} ");
+                    switch (field[counterRow, counterColumn])
+                    {
+                        case '▢':
+                            Console.ForegroundColor = ConsoleColor.White;
+                            Console.Write($"{field[counterRow, counterColumn]} ");
+                            Console.ResetColor();
+                        break;
+                        case '⁕':
+                            Console.ForegroundColor = ConsoleColor.DarkBlue;
+                            Console.Write($"{field[counterRow, counterColumn]} ");
+                            Console.ResetColor();
+                        break;
+                        case '■':
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.Write($"{field[counterRow, counterColumn]} ");
+                            Console.ResetColor();
+                        break;
+                        case '✘':
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write($"{field[counterRow, counterColumn]} ");
+                            Console.ResetColor();
+                        break;
+                    }
                 }
                 Console.WriteLine("\b ]");
             }
@@ -146,6 +169,7 @@ namespace SeaBattle
 
             while (true)
             {
+                Console.WriteLine("Выберете направление (←/→ || ↑/↓)");
                 ConsoleKeyInfo key = Console.ReadKey();
                 switch (key.Key)
                 {
