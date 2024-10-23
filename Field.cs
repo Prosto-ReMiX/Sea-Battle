@@ -118,13 +118,13 @@ namespace SeaBattle
         public void ArrangeShips(Field field, Player player)
         {
             int[] shipsLength = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
-            string[] ships = { "четырехпалубный", "трехпалубный", "двухпалубный", "однопалубный" };
+            string[] ships = {"однопалубный", "двухпалубный", "трехпалубный", "четырехпалубный"};
             
 
             Console.WriteLine($"{player.name_f}, заполните свое поле");
             for (int counterLength = 0; counterLength < shipsLength.Length; counterLength++)
             {
-                PlaceShips(field, shipsLength[counterLength], ships[counterLength]);
+                PlaceShips(field, shipsLength[counterLength], ships[shipsLength[counterLength] - 1]);
             }
         }
 
