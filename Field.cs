@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace SeaBattle
     {
         public char[,] field = new char[10, 10];
         public int Rows = 10; public int Columns = 10;
+
         public char[,] InitField()
         {
             for (int counterRow = 0; counterRow < field.GetLength(0); counterRow++)
@@ -38,24 +40,24 @@ namespace SeaBattle
             Console.WriteLine();
         }
 
-        private void AddShips(Field field, int row, int column, bool isHorizontal, bool isRight, bool isUp, int lenght)
+        private void AddShips(Field field, int row, int column, bool isHorizontal, bool isRight, bool isUp, int length)
         {
             int h, v;
 
             if (isHorizontal && isRight)
             {
-                h = lenght;
+                h = length;
                 v = 1;
 
-                if (lenght == 4 && column >= 7)
+                if (length == 4 && column >= 7)
                 {
                     column = 6;
                 }
-                if (lenght == 3 && column >= 8)
+                if (length == 3 && column >= 8)
                 {
                     column = 7;
                 }
-                if (lenght == 2 && column == 9)
+                if (length == 2 && column == 9)
                 {
                     column = 8;
                 }
@@ -67,14 +69,14 @@ namespace SeaBattle
             //теперь работает
             else if (isHorizontal && !isRight)
             {
-                h = lenght;
+                h = length;
                 v = 1;
 
-                if (lenght == 4 && column <= 2)
+                if (length == 4 && column <= 2)
                     column = 3;
-                if (lenght == 3 && column <= 1)
+                if (length == 3 && column <= 1)
                     column = 2;
-                if (lenght == 2 && column == 0)
+                if (length == 2 && column == 0)
                     column = 1;
                 for (int counterRow = row; counterRow < row + v; counterRow++)
                     for (int counterColumn = column; counterColumn > column - h; counterColumn--)
@@ -84,13 +86,13 @@ namespace SeaBattle
             if (!isHorizontal && isUp)
             {
                 h = 1;
-                v = lenght;
+                v = length;
 
-                if (lenght == 4 && row <= 2)
+                if (length == 4 && row <= 2)
                     row = 3;
-                if (lenght == 3 && row <= 1)
+                if (length == 3 && row <= 1)
                     row = 2;
-                if (lenght == 2 && row == 0)
+                if (length == 2 && row == 0)
                     row = 1;
                 for (int counterRow = row; counterRow > row - v; counterRow--)
                     for (int counterColumn = column; counterColumn < column + h; counterColumn++)
@@ -99,13 +101,13 @@ namespace SeaBattle
             else if (!isHorizontal && !isUp)
             {
                 h = 1;
-                v = lenght;
+                v = length;
 
-                if (lenght == 4 && row >= 7)
+                if (length == 4 && row >= 7)
                     row = 6;
-                if (lenght == 3 && row >= 8)
+                if (length == 3 && row >= 8)
                     row = 7;
-                if (lenght == 2 && row >= 9)
+                if (length == 2 && row >= 9)
                     row = 8;
                 for (int counterRow = row; counterRow < row + v; counterRow++)
                     for (int counterColumn = column; counterColumn < column + h; counterColumn++)
@@ -152,9 +154,11 @@ namespace SeaBattle
                         inputDate = Console.ReadLine();
                         if (inputDate != null)
                         {
-                            PutShipOnField(field, inputDate, lenght);
+                            while (!PutShipOnField(field, inputDate, lenght))
+                            {
+                                Console.WriteLine("Ошибка");
+                            }
                         }
-
                         posX = Console.CursorLeft; posY = Console.CursorTop;
                         field.PrintField(field.field, 65);
                         SavePositionCursor(posX, posY);
@@ -166,9 +170,13 @@ namespace SeaBattle
                         field.PrintField(field.field, 65);
                         SavePositionCursor(posX, posY);
                         inputDate = Console.ReadLine();
+                        inputDate = Console.ReadLine();
                         if (inputDate != null)
                         {
-                            PutShipOnField(field, inputDate, lenght);
+                            while (true)
+                            {
+                                if (PutShipOnField(field, inputDate, lenght)) break;
+                            }
                         }
                         posX = Console.CursorLeft; posY = Console.CursorTop;
                         field.PrintField(field.field, 65);
@@ -184,7 +192,10 @@ namespace SeaBattle
                         inputDate = Console.ReadLine();
                         if (inputDate != null)
                         {
-                            PutShipOnField(field, inputDate, lenght);
+                            while (true)
+                            {
+                                if (PutShipOnField(field, inputDate, lenght)) break;
+                            }
                         }
                         posX = Console.CursorLeft; posY = Console.CursorTop;
                         field.PrintField(field.field, 65);
@@ -193,7 +204,8 @@ namespace SeaBattle
                 }
             }
         }
-        private void PutShipOnField(Field field,string inputDate, int lenght)
+
+        private bool PutShipOnField(Field field,string inputDate, int lenght)
         {
             string[] tokens;
             int row;
@@ -205,6 +217,10 @@ namespace SeaBattle
             tokens = inputDate.Split();
             row = int.Parse(tokens[0]);
             column = int.Parse(tokens[1]);
+
+            if (field.field[row, column] == '▢')
+                return false;
+
             while (true)
             {
                 ConsoleKeyInfo key = Console.ReadKey();
@@ -232,11 +248,30 @@ namespace SeaBattle
                 }
                 break;
             }
+            return true;
         }
+
         public void SavePositionCursor(int posRow, int posColumn)
         {
             Console.SetCursorPosition(posRow, posColumn);
         }
+
+        private bool CheckCoordinate(bool isHorizontal, bool isRight, bool isUp, int length, int row, int column)
+        {
+            for (var counterLength = 1; counterLength < 4; counterLength++)
+            {
+                if (isHorizontal && !isRight)
+                    return column - counterLength < 0;
+                if (isHorizontal && isRight)
+                    return column + counterLength > 10;
+                if (!isHorizontal && isUp)
+                    return row - counterLength < 0;
+                if (!isHorizontal && !isUp)
+                    return row + counterLength > 10;
+            }
+            return true;
+        }
+
         /*private int ParseIndex(char indexRow)
         {
             int row = 0;
