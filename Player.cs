@@ -13,7 +13,7 @@ namespace SeaBattle
 
         public Player(string name, int score) { name_f = name; score_f = score; }
 
-        public string InitNickname()
+        public static string InitNickname()
         {
             string? name;
             name = Console.ReadLine();
@@ -24,7 +24,7 @@ namespace SeaBattle
             return name;
         }
 
-        public bool Shot(Player player, Field field1, Field field2)
+        public static bool Shot(Player player, Field field1, Field field2)
         {
             string? inputDate;
             string[] tokens;

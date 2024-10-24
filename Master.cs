@@ -12,7 +12,7 @@ namespace SeaBattle
     {
         public Master() { }
 
-        public void ShowMenu()
+        public static void ShowMenu()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             Console.Clear();
@@ -36,7 +36,7 @@ namespace SeaBattle
             }
         }
 
-        public void StartGame()
+        public static void StartGame()
         {
             Random rnd = new Random();
             int startNumb = rnd.Next(1,2);
@@ -90,7 +90,7 @@ namespace SeaBattle
             }            
         }
 
-        private string InitNickname()
+        private static string InitNickname()
         {
             string? name;
             name = Console.ReadLine();
@@ -101,7 +101,7 @@ namespace SeaBattle
             return name;
         }
 
-        private void CheckName(Player player1, Player player2)
+        private static void CheckName(Player player1, Player player2)
         {
             if (player1.name_f == player2.name_f)
             {
@@ -110,7 +110,7 @@ namespace SeaBattle
             }
         }
 
-        private bool StopGame(Player player1, Player player2)
+        private static bool StopGame(Player player1, Player player2)
         {
             if (player1.score_f == 20 || player2.score_f == 20)
             {
@@ -120,7 +120,7 @@ namespace SeaBattle
             return false;
         }
 
-        private void GetConfirmation(string message)
+        private static void GetConfirmation(string message)
         {
             while (true)
             {
@@ -139,7 +139,7 @@ namespace SeaBattle
             }
         }
 
-        private void CenterText(string text)
+        private static void CenterText(string text)
         {
             string[] lines = Regex.Split(text, "\r\n|\r|\n");
             int left = 0;
@@ -155,7 +155,7 @@ namespace SeaBattle
             }
         }
 
-        private void CalculateMove(Player player1, Player player2, Field field1, Field field2)
+        private static void CalculateMove(Player player1, Player player2, Field field1, Field field2)
         {
             int posX, posY;
             while (true)
@@ -163,7 +163,7 @@ namespace SeaBattle
                 posX = Console.CursorLeft; posY = Console.CursorTop;
                 field1.PrintField(field1.field, 55); field2.PrintField(field2.field, 85);
                 Field.SavePositionCursor(posX, posY);
-                if (!player1.Shot(player1, field1, field2))
+                if (!Player.Shot(player1, field1, field2))
                 {
                     GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
                     break;
