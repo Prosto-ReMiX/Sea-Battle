@@ -179,24 +179,24 @@ namespace SeaBattle
                     case ConsoleKey.RightArrow:
                         isHorizontal = isRight = true;
                         isUp = false;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
                         AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.LeftArrow:
                         isHorizontal = true;
                         isRight = isUp = false;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
                         AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.UpArrow:
                         isHorizontal = isRight = false;
                         isUp = true;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
                         AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.DownArrow:
                         isHorizontal = isRight = isUp = false;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
+                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
                         AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                 }
@@ -230,6 +230,7 @@ namespace SeaBattle
 
             while (true)
             {
+                Console.WriteLine("<===========================>");
                 Console.Write($"Введите координаты ({shipName}): ");
                 posX = Console.CursorLeft; posY = Console.CursorTop;
                 field.PrintField(field.field, 65);
