@@ -11,6 +11,7 @@ namespace SeaBattle
     class Master
     {
         public Master() { }
+
         public void ShowMenu()
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -34,9 +35,9 @@ namespace SeaBattle
                 }
             }
         }
+
         public void StartGame()
         {
-            int posX, posY;
             Random rnd = new Random();
             int startNumb = rnd.Next(1,2);
             Console.Clear();
@@ -75,67 +76,20 @@ namespace SeaBattle
             {
                 while (true)
                 {
-                    while (true)
-                    {
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field2.PrintField(field2.field, 55); field4.PrintField(field4.field, 85);
-                        field2.SavePositionCursor(posX, posY);
-                        if (!player1.Shot(player1, field2, field4))
-                        {
-                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                            break;
-                        }
-                        if (StopGame(player1, player2))
-                            return;
-                    }
-                    while (true)
-                    {
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field1.PrintField(field1.field, 55); field3.PrintField(field3.field, 85);
-                        field1.SavePositionCursor(posX, posY);
-                        if (!player2.Shot(player2, field1, field3))
-                        {
-                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                            break;
-                        }
-                        if (StopGame(player1, player2))
-                            return;
-                    }
+                    CalculateMove(player1 , player2, field1, field3);
+                    CalculateMove(player1 , player2, field2, field4);
                 }                    
             }
             else
             {
                 while (true)
                 {
-                    while (true)
-                    {
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field2.PrintField(field2.field, 55); field4.PrintField(field4.field, 85);
-                        field2.SavePositionCursor(posX, posY);
-                        if (!player2.Shot(player2, field1, field4))
-                        {
-                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                            break;
-                        }
-                        if (StopGame(player1, player2))
-                            return;
-                    }
-                    while (true)
-                    {
-                        posX = Console.CursorLeft; posY = Console.CursorTop;
-                        field1.PrintField(field1.field, 55); field4.PrintField(field4.field, 85);
-                        field1.SavePositionCursor(posX, posY);
-                        if (!player1.Shot(player1, field2, field3))
-                        {
-                            GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
-                            break;
-                        }
-                        if (StopGame(player1, player2))
-                            return;
-                    }
+                    CalculateMove(player1, player2, field2, field4);
+                    CalculateMove(player1 , player2, field1, field3);
                 }
             }            
         }
+
         private string InitNickname()
         {
             string? name;
@@ -201,6 +155,23 @@ namespace SeaBattle
             }
         }
 
+        private void CalculateMove(Player player1, Player player2, Field field1, Field field2)
+        {
+            int posX, posY;
+            while (true)
+            {
+                posX = Console.CursorLeft; posY = Console.CursorTop;
+                field1.PrintField(field1.field, 55); field2.PrintField(field2.field, 85);
+                Field.SavePositionCursor(posX, posY);
+                if (!player1.Shot(player1, field1, field2))
+                {
+                    GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
+                    break;
+                }
+                if (StopGame(player1, player2))
+                    return;
+            }
+        }
         /*public void ShowField()
         {
             char[,] field = new char[10, 10];

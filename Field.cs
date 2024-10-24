@@ -63,7 +63,7 @@ namespace SeaBattle
             Console.WriteLine();
         }
 
-        private void AddShips(Field field, int row, int column, bool isHorizontal, bool isRight, bool isUp, int length)
+        private static void AddShip(Field field, int row, int column, bool isHorizontal, bool isRight, bool isUp, int length)
         {
             int h, v;
 
@@ -147,11 +147,11 @@ namespace SeaBattle
             Console.WriteLine($"{player.name_f}, заполните свое поле");
             for (int counterLength = 0; counterLength < shipsLength.Length; counterLength++)
             {
-                PlaceShips(field, shipsLength[counterLength], ships[shipsLength[counterLength] - 1]);
+                InitShip(field, shipsLength[counterLength], ships[shipsLength[counterLength] - 1]);
             }
         }
 
-        private int PutShipOnField(Field field,string inputDate, int lenght)
+        private static int ChangeCourse(Field field,string inputDate, int lenght)
         {
             string[] tokens;
             int row;
@@ -177,24 +177,24 @@ namespace SeaBattle
                         isHorizontal = isRight = true;
                         isUp = false;
                         if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
-                        field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.LeftArrow:
                         isHorizontal = true;
                         isRight = isUp = false;
                         if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
-                        field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.UpArrow:
                         isHorizontal = isRight = false;
                         isUp = true;
                         if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
-                        field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                     case ConsoleKey.DownArrow:
                         isHorizontal = isRight = isUp = false;
                         if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row - 1, column - 1)) return -2;
-                        field.AddShips(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
                         break;
                 }
                 break;
@@ -202,12 +202,12 @@ namespace SeaBattle
             return 0;
         }
 
-        public void SavePositionCursor(int posRow, int posColumn)
+        public static void SavePositionCursor(int posRow, int posColumn)
         {
             Console.SetCursorPosition(posRow, posColumn);
         }
 
-        private bool CheckCoordinate(bool isHorizontal, bool isRight, bool isUp, int length, int row, int column)
+        private static bool CheckCoordinate(bool isHorizontal, bool isRight, bool isUp, int length, int row, int column)
         {
             if (isHorizontal && !isRight && !isUp)
                if (column - length < 0) return false;
@@ -220,7 +220,7 @@ namespace SeaBattle
             return true;
         }
 
-        private void PlaceShips(Field field, int length, string shipName)
+        private static void InitShip(Field field, int length, string shipName)
         {
             string? inputDate;
             int posX, posY;
@@ -235,11 +235,11 @@ namespace SeaBattle
                 inputDate = Console.ReadLine();
                 if (inputDate != null)
                 {
-                    if (PutShipOnField(field, inputDate, length) == -1)
+                    if (ChangeCourse(field, inputDate, length) == -1)
                     {
                         Console.WriteLine("Ошибка, клетка уже занята");
                     }
-                    else if (PutShipOnField(field, inputDate, length) == -2)
+                    else if (ChangeCourse(field, inputDate, length) == -2)
                     {
                         Console.WriteLine("Ошибка, направление выбрано неправильно");
                     }
