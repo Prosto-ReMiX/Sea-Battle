@@ -147,7 +147,10 @@ namespace SeaBattle
             Console.WriteLine($"{player.name_f}, заполните свое поле");
             for (int counterLength = 0; counterLength < shipsLength.Length; counterLength++)
             {
-                InitShip(field, shipsLength[counterLength], ships[shipsLength[counterLength] - 1]);
+                while (true)
+                {
+                    if (InitShip(field, shipsLength[counterLength], ships[shipsLength[counterLength] - 1])) break;
+                }
             }
         }
 
@@ -220,7 +223,7 @@ namespace SeaBattle
             return true;
         }
 
-        private static void InitShip(Field field, int length, string shipName)
+        private static bool InitShip(Field field, int length, string shipName)
         {
             string? inputDate;
             int posX, posY;
@@ -233,22 +236,36 @@ namespace SeaBattle
                 SavePositionCursor(posX, posY);
 
                 inputDate = Console.ReadLine();
-                if (inputDate != null)
+                if (!string.IsNullOrEmpty(inputDate))
                 {
-                    if (ChangeCourse(field, inputDate, length) == -1)
+                    switch (ChangeCourse(field, inputDate, length))
                     {
-                        Console.WriteLine("Ошибка, клетка уже занята");
+                        case -1:
+                            {
+                                Console.WriteLine("Ошибка, клетка уже занята");
+                                return false;
+                            }
+                        case -2:
+                            {
+                                Console.WriteLine("Ошибка, направление выбрано неправильно");
+                                return false;
+                            }
+                        default:
+                            goto DefEntry;
                     }
-                    else if (ChangeCourse(field, inputDate, length) == -2)
-                    {
-                        Console.WriteLine("Ошибка, направление выбрано неправильно");
-                    }
-                    else break;
+                DefEntry:
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Ошибка! Нужно ввести координаты");
+                    return false;
                 }
             }
             posX = Console.CursorLeft; posY = Console.CursorTop;
             field.PrintField(field.field, 65);
             SavePositionCursor(posX, posY);
+            return true;
         }
     }
 }

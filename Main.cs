@@ -7,7 +7,7 @@
             try
             {
                 Master master = new();
-                master.ShowMenu();
+                Master.ShowMenu();
             }
             catch (Exception e)
             {
