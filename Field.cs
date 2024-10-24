@@ -71,20 +71,6 @@ namespace SeaBattle
             {
                 h = length;
                 v = 1;
-
-                if (length == 4 && column >= 7)
-                {
-                    column = 6;
-                }
-                if (length == 3 && column >= 8)
-                {
-                    column = 7;
-                }
-                if (length == 2 && column == 9)
-                {
-                    column = 8;
-                }
-
                 for (int counterRow = row; counterRow < row + v; counterRow++)
                     for (int counterColumn = column; counterColumn < column + h; counterColumn++)
                         field.field[counterRow, counterColumn] = '▢';
@@ -94,13 +80,6 @@ namespace SeaBattle
             {
                 h = length;
                 v = 1;
-
-                if (length == 4 && column <= 2)
-                    column = 3;
-                if (length == 3 && column <= 1)
-                    column = 2;
-                if (length == 2 && column == 0)
-                    column = 1;
                 for (int counterRow = row; counterRow < row + v; counterRow++)
                     for (int counterColumn = column; counterColumn > column - h; counterColumn--)
                         field.field[counterRow, counterColumn] = '▢';
@@ -110,13 +89,6 @@ namespace SeaBattle
             {
                 h = 1;
                 v = length;
-
-                if (length == 4 && row <= 2)
-                    row = 3;
-                if (length == 3 && row <= 1)
-                    row = 2;
-                if (length == 2 && row == 0)
-                    row = 1;
                 for (int counterRow = row; counterRow > row - v; counterRow--)
                     for (int counterColumn = column; counterColumn < column + h; counterColumn++)
                         field.field[counterRow, counterColumn] = '▢';
@@ -125,13 +97,6 @@ namespace SeaBattle
             {
                 h = 1;
                 v = length;
-
-                if (length == 4 && row >= 7)
-                    row = 6;
-                if (length == 3 && row >= 8)
-                    row = 7;
-                if (length == 2 && row >= 9)
-                    row = 8;
                 for (int counterRow = row; counterRow < row + v; counterRow++)
                     for (int counterColumn = column; counterColumn < column + h; counterColumn++)
                         field.field[counterRow, counterColumn] = '▢';
@@ -162,46 +127,60 @@ namespace SeaBattle
             bool isHorizontal;
             bool isRight;
             bool isUp;
-           
-            tokens = inputDate.Split();
+
+            try
+            {
+                tokens = inputDate.Split();
+                row = int.Parse(tokens[0]);
+                column = int.Parse(tokens[1]);
+            }
+            catch (FormatException) { return -3; }
+            catch (IndexOutOfRangeException) { return -4; }
+
+            /*tokens = inputDate.Split();
             row = int.Parse(tokens[0]);
             column = int.Parse(tokens[1]);
+            */
 
             if (field.field[row - 1, column - 1] == '▢')
                 return -1;
 
-            while (true)
+            try
             {
-                Console.WriteLine("Выберете направление (←/→ || ↑/↓)");
-                ConsoleKeyInfo key = Console.ReadKey();
-                switch (key.Key)
+                while (true)
                 {
-                    case ConsoleKey.RightArrow:
-                        isHorizontal = isRight = true;
-                        isUp = false;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
-                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        isHorizontal = true;
-                        isRight = isUp = false;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
-                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
-                        break;
-                    case ConsoleKey.UpArrow:
-                        isHorizontal = isRight = false;
-                        isUp = true;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
-                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
-                        break;
-                    case ConsoleKey.DownArrow:
-                        isHorizontal = isRight = isUp = false;
-                        if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
-                        AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
-                        break;
+                    Console.WriteLine("Выберете направление (←/→ || ↑/↓)");
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    switch (key.Key)
+                    {
+                        case ConsoleKey.RightArrow:
+                            isHorizontal = isRight = true;
+                            isUp = false;
+                            if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
+                            AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                            break;
+                        case ConsoleKey.LeftArrow:
+                            isHorizontal = true;
+                            isRight = isUp = false;
+                            if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
+                            AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                            break;
+                        case ConsoleKey.UpArrow:
+                            isHorizontal = isRight = false;
+                            isUp = true;
+                            if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
+                            AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                            break;
+                        case ConsoleKey.DownArrow:
+                            isHorizontal = isRight = isUp = false;
+                            if (!CheckCoordinate(isHorizontal, isRight, isUp, lenght, row, column)) return -2;
+                            AddShip(field, row - 1, column - 1, isHorizontal, isRight, isUp, lenght);
+                            break;
+                    }
+                    break;
                 }
-                break;
             }
+            catch (IndexOutOfRangeException) { return -2; }
             return 0;
         }
 
@@ -222,35 +201,37 @@ namespace SeaBattle
                if (row + length > 9) return false;
             return true;
         }
-
+        
         private static bool InitShip(Field field, int length, string shipName)
         {
             string? inputDate;
             int posX, posY;
 
+            Console.WriteLine("<===========================>");
+            Console.Write($"Введите координаты ({shipName}): ");
+            posX = Console.CursorLeft; posY = Console.CursorTop;
+            field.PrintField(field.field, 65);
+            SavePositionCursor(posX, posY);
+
             while (true)
             {
-                Console.WriteLine("<===========================>");
-                Console.Write($"Введите координаты ({shipName}): ");
-                posX = Console.CursorLeft; posY = Console.CursorTop;
-                field.PrintField(field.field, 65);
-                SavePositionCursor(posX, posY);
-
                 inputDate = Console.ReadLine();
                 if (!string.IsNullOrEmpty(inputDate))
                 {
                     switch (ChangeCourse(field, inputDate, length))
                     {
                         case -1:
-                            {
-                                Console.WriteLine("Ошибка, клетка уже занята");
-                                return false;
-                            }
+                            Console.WriteLine("Ошибка, клетка уже занята");
+                            return false;
                         case -2:
-                            {
-                                Console.WriteLine("Ошибка, направление выбрано неправильно");
-                                return false;
-                            }
+                            Console.WriteLine("Ошибка, направление выбрано неправильно");
+                            return false;   
+                        case -3:
+                            Console.WriteLine("Ошибка, ожидаются целочисленные данные");
+                            return false;
+                        case -4:
+                            Console.WriteLine("Ошибка, нужно ввести координаты полностью");
+                            return false;
                         default:
                             goto DefEntry;
                     }
