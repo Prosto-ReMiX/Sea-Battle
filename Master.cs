@@ -71,23 +71,38 @@ namespace SeaBattle
             GetConfirmation("Для продолжения нажмите - Enter");
 
             
-            
             if (startNumb == 1)
             {
                 while (true)
                 {
-                    CalculateMove(player1 , player2, field1, field3);
-                    CalculateMove(player1 , player2, field2, field4);
+                    if (CalculateMove(player1, player2, field1, field3))
+                    {
+                        Console.WriteLine("Для выхода - Esc");
+                        return;
+                    }
+                    if (CalculateMove(player2, player1, field2, field4))
+                    {
+                        Console.WriteLine("Для выхода - Esc");
+                        return;
+                    }
                 }                    
             }
             else
             {
                 while (true)
                 {
-                    CalculateMove(player1, player2, field2, field4);
-                    CalculateMove(player1 , player2, field1, field3);
+                    if (CalculateMove(player2, player1, field2, field4))
+                    {
+                        Console.WriteLine("Для выхода - Esc");
+                        return;
+                    }
+                    if (CalculateMove(player1, player2, field1, field3))
+                    {
+                        Console.WriteLine("Для выхода - Esc");
+                        return;
+                    }
                 }
-            }            
+            }
         }
 
         private static string InitNickname()
@@ -110,7 +125,7 @@ namespace SeaBattle
             }
         }
 
-        private static bool StopGame(Player player1, Player player2)
+        private static bool CheckScore(Player player1, Player player2)
         {
             if (player1.score_f == 20 || player2.score_f == 20)
             {
@@ -155,7 +170,7 @@ namespace SeaBattle
             }
         }
 
-        private static void CalculateMove(Player player1, Player player2, Field field1, Field field2)
+        private static bool CalculateMove(Player player1, Player player2, Field field1, Field field2)
         {
             int posX, posY;
             while (true)
@@ -165,12 +180,16 @@ namespace SeaBattle
                 Field.SavePositionCursor(posX, posY);
                 if (!Player.Shot(player1, field1, field2))
                 {
+                    posX = Console.CursorLeft; posY = Console.CursorTop;
+                    field1.PrintField(field1.field, 55); field2.PrintField(field2.field, 85);
+                    Field.SavePositionCursor(posX, posY);
                     GetConfirmation("Вы промахнулись! Для передачи хода - Enter");
                     break;
                 }
-                if (StopGame(player1, player2))
-                    return;
+                if (CheckScore(player1, player2))
+                    return true;
             }
+            return false;
         }
         /*public void ShowField()
         {
